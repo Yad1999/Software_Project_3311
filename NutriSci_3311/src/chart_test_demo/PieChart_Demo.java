@@ -21,8 +21,8 @@ import org.jfree.data.general.DefaultPieDataset;
  * How to run:
  * Just execute the main method to see the pie chart window.
  * 
- * Author: [Your Name]
- * Date: [Today's Date]
+ * Author: AJ
+ * Date: 2025-06-22
  */
 public class PieChart_Demo {
 
