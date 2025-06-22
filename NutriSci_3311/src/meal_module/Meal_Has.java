@@ -13,16 +13,16 @@ public class Meal_Has {
 	private Meal_Ingredient meal_ingredient;
 	private int weight;
 	/**
-	 * @param meal_has_id
 	 * @param meal
 	 * @param meal_ingredient
 	 * @param weight
 	 */
-	public Meal_Has(Long meal_has_id, Meal meal, Meal_Ingredient meal_ingredient, int weight) {
-		this.meal_has_id = meal_has_id;
+	public Meal_Has(Meal meal, Meal_Ingredient meal_ingredient, int weight) {
+		//todo: generate id
 		this.meal = meal;
 		this.meal_ingredient = meal_ingredient;
 		this.weight = weight;
+		//update Meal_Has_Nutrient amounts in the database
 	}
 	/**
 	 * @return the meal_has_id

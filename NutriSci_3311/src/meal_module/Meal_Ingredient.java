@@ -11,11 +11,10 @@ public class Meal_Ingredient {
 	private Long meal_ingredient_id;
 	private String ingredient;
 	/**
-	 * @param meal_ingredient_id
 	 * @param ingredient
 	 */
-	public Meal_Ingredient(Long meal_ingredient_id, String ingredient) {
-		this.meal_ingredient_id = meal_ingredient_id;
+	public Meal_Ingredient(String ingredient) {
+		//todo: generate id
 		this.ingredient = ingredient;
 	}
 	/**

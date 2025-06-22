@@ -15,9 +15,9 @@ public class Meal_Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Meal_Ingredient mi = new Meal_Ingredient(Long.valueOf(1), "egg");
-		Meal m = new Meal(Long.valueOf(1), new Meal_Type(Long.valueOf(1), "Breakfast"), "Fried Egg");
-		Meal_Has mh = new Meal_Has(Long.valueOf(1), m, mi, 100);
+		Meal_Ingredient mi = new Meal_Ingredient("egg");
+		Meal m = new Meal(new Meal_Type("Breakfast"), "Fried Egg");
+		Meal_Has mh = new Meal_Has(m, mi, 100);
 		System.out.println(m.getMeal());
 		
 	}

@@ -11,11 +11,10 @@ public class Meal_Type {
 	private Long meal_type_id;
 	private String type;
 	/**
-	 * @param meal_type_id
 	 * @param type
 	 */
-	public Meal_Type(Long meal_type_id, String type) {
-		this.meal_type_id = meal_type_id;
+	public Meal_Type(String type) {
+		//todo: generate id
 		this.type = type;
 	}
 	/**

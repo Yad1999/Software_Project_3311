@@ -1,4 +1,6 @@
 package meal_module;
+import java.util.ArrayList;
+
 import profile_module.*;
 /**
  * This class representing the Meal entity in the database
@@ -12,14 +14,20 @@ public class Meal {
 	private Meal_Type meal_type;
 	private String meal;
 	/**
-	 * @param meal_id
 	 * @param meal_type
 	 * @param meal
 	 */
-	public Meal(Long meal_id, Meal_Type meal_type, String meal) {
-		this.meal_id = meal_id;
+	public Meal(Meal_Type meal_type, String meal) {
+		//todo: generate id
 		this.meal_type = meal_type;
 		this.meal = meal;
+	}
+	/**
+	 * @param meal_ingredient
+	 * @param weight
+	 */
+	public void addIngredient(Meal_Ingredient meal_ingredient, int weight) {
+		Meal_Has meal_has = new Meal_Has(this, meal_ingredient, weight);
 	}
 	/**
 	 * @return the meal_id
@@ -56,5 +64,10 @@ public class Meal {
 	 */
 	public void setMeal(String meal) {
 		this.meal = meal;
+	}
+	public ArrayList<Meal_Has_Nutrient> getNutrients() {
+		ArrayList<Meal_Has_Nutrient> list = new ArrayList<>();
+		//add nutrients based on a database query
+		return list;
 	}
 }
