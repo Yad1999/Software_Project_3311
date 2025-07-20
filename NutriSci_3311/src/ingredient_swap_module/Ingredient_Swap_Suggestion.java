@@ -24,7 +24,7 @@ public class Ingredient_Swap_Suggestion {
 		this.meal = meal;
 		this.nutrient1 = nutrient1;
 		this.goal_amount1 = Math.max(goal_amount1, -100); //if the goal is to decrease the selected nutrient more than 100% setting the amount to -100
-		this.nutrient_amount1 = meal.calculateNutrient(nutrient1);
+		// this.nutrient_amount1 = meal.calculateNutrient(nutrient1);
 	}
 	/**
 	 * @param meal
@@ -43,7 +43,7 @@ public class Ingredient_Swap_Suggestion {
 	}
 	
 	public Meal getSuggestion() {
-		Meal suggestion;
+		Meal suggestion = null;
 		//query database for the alternative based in Meal_Has_Nutrient data adjusted with the goal
 		return suggestion;
 	}
