@@ -116,3 +116,5 @@ backups/
 test-data/
 sample-data/
 *.dump
+
+/target/
