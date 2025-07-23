@@ -1,0 +1,17 @@
+# Database Configuration Template for NutriSci Application
+# Copy this file to database.properties and update with your actual database settings
+
+# Database Connection URL
+db.url=jdbc:sqlserver://YOUR_SERVER:1433;databaseName=YOUR_DATABASE;trustServerCertificate=true
+
+# Database Credentials - REPLACE WITH YOUR ACTUAL CREDENTIALS
+db.username=YOUR_USERNAME
+db.password=YOUR_PASSWORD
+
+# Connection Pool Settings (for future implementation)
+db.pool.maxSize=10
+db.pool.minSize=2
+db.pool.timeout=30000
+
+# Database Driver
+db.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver

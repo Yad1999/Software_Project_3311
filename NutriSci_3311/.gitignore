@@ -1,2 +1,120 @@
 /bin/
+
+# ========================================
+# DATABASE SECURITY - CRITICAL
+# ========================================
+# Database Configuration Files with Credentials
+src/config/database.properties
+config/database.properties
+
+# Backup configuration files
+*.properties.backup
+*.properties.bak
+
+# Environment-specific configurations
+src/config/database-dev.properties
+src/config/database-prod.properties
+src/config/database-test.properties
+
+# Additional database configuration patterns
+datasource.properties
+connection.properties
+
+# ========================================
+# LOG FILES (may contain sensitive data)
+# ========================================
+*.log
+logs/
+log/
+
+# ========================================
+# IDE FILES
+# ========================================
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# ========================================
+# COMPILED FILES
+# ========================================
+*.class
+target/
+build/
+
+# ========================================
+# PACKAGE FILES
+# ========================================
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# ========================================
+# BUILD TOOLS
+# ========================================
+.mvn/
+.gradle/
+gradle-app.setting
+
+# ========================================
+# OS GENERATED FILES
+# ========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ========================================
+# TEMPORARY FILES
+# ========================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ========================================
+# SECURITY CERTIFICATES & KEYS
+# ========================================
+*.key
+*.cert
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# CONFIGURATION FILES
+# Spring Boot and application configs
+**/application*.yml
+**/application*.yaml
+config.properties
+settings.properties
+local.properties
+hibernate.cfg.xml
+persistence.xml
+
+# AUTHENTICATION & SECURITY TOKENS
+auth.properties
+secrets.properties
+*.token
+oauth.properties
+jwt.properties
+api-keys.properties
+
+# HEALTH/NUTRITION APP SPECIFIC DATA
+user-data/
+exports/
+backups/
+test-data/
+sample-data/
+*.dump
+
 /target/
