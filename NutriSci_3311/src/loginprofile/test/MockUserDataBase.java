@@ -1,10 +1,13 @@
 package loginprofile.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MockUserDataBase {
 
-	HashMap<String, String> mockProfileDB;
+	private HashMap<String, String> mockProfileDB;
+	private HashMap<String, List<String>> userMealLogs = new HashMap<>();
 	
 	MockUserDataBase() {
 		mockProfileDB = new HashMap<>();
@@ -13,7 +16,7 @@ public class MockUserDataBase {
 		mockProfileDB.put("User3", "userpassword3");
 	}
 	
-	public HashMap getProfileDB() {
+	public HashMap<String, String> getProfileDB() {
 		return mockProfileDB;
 	}
 	
@@ -23,5 +26,24 @@ public class MockUserDataBase {
 	
 	public void addUser(String username, String password) {
 		mockProfileDB.put(username, password);
+	}
+	
+	// temporary/not used methods
+	public void addMeal(String username, String date, String mealType, List<MealEntry> entries) {
+		StringBuilder mealRecord = new StringBuilder();
+		mealRecord.append("Date: ").append(date).append(", Meal: ").append(mealType).append("\n");
+		
+		for (MealEntry e : entries) {
+			mealRecord.append("  - ").append(e.toString()).append("\n");
+		}
+		
+		userMealLogs.putIfAbsent(username, new ArrayList<>());
+		userMealLogs.get(username).add(mealRecord.toString());
+
+        System.out.println("Meal saved to mock database for user '" + username + "'.");
+	}
+	
+	public List<String> getMeals(String username) {
+        return userMealLogs.getOrDefault(username, new ArrayList<>());
 	}
 }

@@ -2,6 +2,8 @@ package loginprofile.test;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -28,6 +30,7 @@ public class MealLogUI {
 	private JButton addRowButton;
 	private JButton submitButton;
 	private JLabel statusLabel;
+	
 	
 	public MealLogUI() {
 		initialize();
@@ -74,16 +77,16 @@ public class MealLogUI {
 		submitButton = new JButton("Submit Meal");
 		submitButton.addActionListener(e -> handleSubmitMeal());
 		
-		 buttonPanel.add(addRowButton);
-	     buttonPanel.add(submitButton);
+		buttonPanel.add(addRowButton);
+	    buttonPanel.add(submitButton);
 	     
-	     bottomPanel.add(buttonPanel, BorderLayout.NORTH);
+	    bottomPanel.add(buttonPanel, BorderLayout.NORTH);
 	     
-	     statusLabel = new JLabel(" ");
-	     statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
-	     bottomPanel.add(statusLabel, BorderLayout.SOUTH);
+	    statusLabel = new JLabel(" ");
+	    statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+	    bottomPanel.add(statusLabel, BorderLayout.SOUTH);
 	     
-	     frame.add(bottomPanel, BorderLayout.SOUTH);
+	    frame.add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
 	private void handleSubmitMeal() {
