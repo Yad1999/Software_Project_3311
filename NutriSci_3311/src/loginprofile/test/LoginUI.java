@@ -3,6 +3,10 @@ package loginprofile.test;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -10,6 +14,7 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -17,12 +22,13 @@ import javax.swing.JTextField;
 public class LoginUI implements ActionListener{
 
 	private JFrame frame;
+	private JPanel centerPanel;
+	private JPanel formPanel;
+	private JPanel messagePanel;
 	private JButton loginButton;
-	private JButton resetButton;
+	private JButton createAccountButton;
 	private JTextField userIDField;
 	private JPasswordField passIDField;
-	private JLabel userIDLabel;
-	private JLabel passIDLabel;
 	private JLabel messageLabel;
 	
 	HashMap<String, String> loginInfo = new HashMap<>();
@@ -38,42 +44,50 @@ public class LoginUI implements ActionListener{
 		// Initialize frame
 		frame = new JFrame();
 		frame.setTitle("NutriSci");
-		frame.setSize(420, 420);
+		frame.setSize(420, 300);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		frame.setLayout(null);
+		frame.setLayout(new BorderLayout());
 		
-		userIDLabel = new JLabel("Username:");
-		userIDLabel.setBounds(50, 100, 75, 25);
+		centerPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10, 10, 10, 10);
+		
+		formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+
 		userIDField = new JTextField();
-		userIDField.setBounds(125, 100, 200, 25);
-		
-		passIDLabel = new JLabel("Password:");
-		passIDLabel.setBounds(50, 150, 75, 25);
 		passIDField = new JPasswordField();
-		passIDField.setBounds(125, 150, 200, 25);
 		
 		loginButton = new JButton("Login");
-		loginButton.setBounds(125, 200, 100, 25);
 		loginButton.setFocusable(false);
 		loginButton.addActionListener(this);
 		
-		resetButton = new JButton("Reset");
-		resetButton.setBounds(225, 200, 100, 25);
-		resetButton.setFocusable(false);
-		resetButton.addActionListener(this);
+		createAccountButton = new JButton("Create Account");
+		createAccountButton.setFocusable(false);
+		createAccountButton.addActionListener(this);
 		
+		formPanel.add(new JLabel("Username"));
+		formPanel.add(userIDField);
+		formPanel.add(new JLabel("Password"));
+		formPanel.add(passIDField);
+		formPanel.add(loginButton);
+		formPanel.add(createAccountButton);
+//		formPanel.add(messageLabel);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		centerPanel.add(formPanel, gbc);
+		
+		messagePanel = new JPanel();
 		messageLabel = new JLabel("");
-		messageLabel.setBounds(125, 250, 250, 35);
-		messageLabel.setFont(new Font(null, Font.ITALIC, 25));
+		messageLabel.setFont(new Font(null, Font.ITALIC, 16));
+		messageLabel.setHorizontalAlignment(JLabel.CENTER);
+		messagePanel.add(messageLabel);
 		
-		frame.add(userIDLabel);
-		frame.add(userIDField);
-		frame.add(passIDLabel);
-		frame.add(passIDField);
-		frame.add(loginButton);
-		frame.add(resetButton);
-		frame.add(messageLabel);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		centerPanel.add(messagePanel, gbc);
+		frame.add(centerPanel, BorderLayout.CENTER);
 	}
 	
 	public void show() {
@@ -108,9 +122,10 @@ public class LoginUI implements ActionListener{
 			}
 		}
 		
-		if (e.getSource() == resetButton) {
-			userIDField.setText("");
-			passIDField.setText("");
+		if (e.getSource() == createAccountButton) {
+			frame.dispose();
+			CreateAccountUI createAccountUI = new CreateAccountUI();
+			createAccountUI.show();
 		}
 	}
 }

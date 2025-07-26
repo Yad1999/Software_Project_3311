@@ -17,5 +17,11 @@ public class MockUserDataBase {
 		return mockProfileDB;
 	}
 	
+	public boolean userExists(String username) {
+		return mockProfileDB.containsKey(username);
+	}
 	
+	public void addUser(String username, String password) {
+		mockProfileDB.put(username, password);
+	}
 }
