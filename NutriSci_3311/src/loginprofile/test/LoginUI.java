@@ -14,6 +14,7 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -72,7 +73,6 @@ public class LoginUI implements ActionListener{
 		formPanel.add(passIDField);
 		formPanel.add(loginButton);
 		formPanel.add(createAccountButton);
-//		formPanel.add(messageLabel);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -103,13 +103,13 @@ public class LoginUI implements ActionListener{
 			
 			if (loginInfo.containsKey(userID)) {
 				if (loginInfo.get(userID).equals(passID)) {
-					messageLabel.setForeground(Color.GREEN);
-					messageLabel.setText("Login Successful");
-					
+					JOptionPane.showMessageDialog(frame, "Login Succesful!");
 					frame.dispose();
-					ProfileUI profileUI = new ProfileUI(userID);
-					profileUI.show();
+					//ProfileUI profileUI = new ProfileUI(userID);
+					//profileUI.show();
 					
+					MealLogUI mealLogUI = new MealLogUI();
+					mealLogUI.show();
 				}
 				else {
 					messageLabel.setForeground(Color.RED);
