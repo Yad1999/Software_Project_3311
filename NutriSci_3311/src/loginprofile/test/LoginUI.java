@@ -108,8 +108,11 @@ public class LoginUI implements ActionListener{
 					//ProfileUI profileUI = new ProfileUI(userID);
 					//profileUI.show();
 					
-					MealLogUI mealLogUI = new MealLogUI();
-					mealLogUI.show();
+					//MealLogUI mealLogUI = new MealLogUI();
+					//mealLogUI.show();
+					
+					MainDashboardUI mainDashboardUI = new MainDashboardUI();
+					mainDashboardUI.show();
 				}
 				else {
 					messageLabel.setForeground(Color.RED);
