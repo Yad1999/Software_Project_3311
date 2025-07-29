@@ -2,6 +2,10 @@ package loginprofile.test;
 
 import java.awt.EventQueue;
 
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -12,9 +16,19 @@ public class Main {
 			public void run() {
 				// TODO Auto-generated method stub
 				MockUserDataBase profileDatabase = new MockUserDataBase();
-				
-				LoginUI loginUI = new LoginUI(profileDatabase.getProfileDB());
-				loginUI.show();
+				for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+			        if ("Nimbus".equals(info.getName())) {
+			            try {
+							UIManager.setLookAndFeel(info.getClassName());
+						} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+								| UnsupportedLookAndFeelException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			            break;
+			        }
+			    }
+				new LoginUI(profileDatabase.getProfileDB()).show();
 			}
 			
 		});

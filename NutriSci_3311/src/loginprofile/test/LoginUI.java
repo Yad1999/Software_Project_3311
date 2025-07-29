@@ -7,8 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.JButton;
@@ -20,7 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
-public class LoginUI implements ActionListener{
+public class LoginUI {
 
 	private JFrame frame;
 	private JPanel centerPanel;
@@ -61,11 +59,10 @@ public class LoginUI implements ActionListener{
 		
 		loginButton = new JButton("Login");
 		loginButton.setFocusable(false);
-		loginButton.addActionListener(this);
-		
+		loginButton.addActionListener(e -> loginFunction());		
 		createAccountButton = new JButton("Create Account");
 		createAccountButton.setFocusable(false);
-		createAccountButton.addActionListener(this);
+		createAccountButton.addActionListener(e -> showCreateAccount());
 		
 		formPanel.add(new JLabel("Username"));
 		formPanel.add(userIDField);
@@ -94,41 +91,33 @@ public class LoginUI implements ActionListener{
 		frame.setVisible(true);
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getSource() == loginButton) {
-			String userID = userIDField.getText();
-			String passID = String.valueOf(passIDField.getPassword());
-			
-			if (loginInfo.containsKey(userID)) {
-				if (loginInfo.get(userID).equals(passID)) {
-					JOptionPane.showMessageDialog(frame, "Login Succesful!");
-					frame.dispose();
-					//ProfileUI profileUI = new ProfileUI(userID);
-					//profileUI.show();
-					
-					//MealLogUI mealLogUI = new MealLogUI();
-					//mealLogUI.show();
-					
-					MainDashboardUI mainDashboardUI = new MainDashboardUI();
-					mainDashboardUI.show();
-				}
-				else {
-					messageLabel.setForeground(Color.RED);
-					messageLabel.setText("Wrong Password!");
-				}
+	
+	private void loginFunction() {
+		String userID = userIDField.getText();
+		String passID = String.valueOf(passIDField.getPassword());
+		
+		if (loginInfo.containsKey(userID)) {
+			if (loginInfo.get(userID).equals(passID)) {
+				JOptionPane.showMessageDialog(frame, "Login Succesful!");
+				frame.dispose();
+				
+				MainDashboardUI mainDashBoardUI= new MainDashboardUI();
+				mainDashBoardUI.show();
 			}
 			else {
 				messageLabel.setForeground(Color.RED);
-				messageLabel.setText("Username not found");
+				messageLabel.setText("Wrong Password!");
 			}
 		}
-		
-		if (e.getSource() == createAccountButton) {
-			frame.dispose();
-			CreateAccountUI createAccountUI = new CreateAccountUI();
-			createAccountUI.show();
+		else {
+			messageLabel.setForeground(Color.RED);
+			messageLabel.setText("Username not found");
 		}
+	}
+	
+	private void showCreateAccount() {
+		frame.dispose();
+		CreateAccountUI createAccountUI = new CreateAccountUI();
+		createAccountUI.show();
 	}
 }
