@@ -1,54 +1,54 @@
 package com.nutrisci.ui;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import org.jfree.chart.*;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 import java.awt.*;
 
 /**
- * The {@code MealSwapUI} class provides a user interface for setting nutritional swap goals
- * and visualizing food substitutions before and after the swap.
- *
- * <p>This panel allows users to input a date, select a meal type, and define two nutrient-based goals
- * (e.g., increase fiber, reduce calories). Upon submission, a popup displays a side-by-side comparison
- * of the original and swapped meals with visual cues and tooltips highlighting nutritional changes.</p>
- *
- * <p>Tooltips and color-coded cells in the comparison table enhance user feedback and clarity.</p>
+ * The {@code MealSwapUI} class provides a user interface to define nutrient goals
+ * and visualize meal swaps through tabular and graphical comparisons.
+ * <p>
+ * Users can select a date and meal type, specify two nutrient goals, and view the
+ * impact of swaps using colored tables and switchable line/bar charts.
  */
 public class MealSwapUI {
 
-    /** The main panel for this UI component. */
+    /** Root panel containing all UI components. */
     private JPanel panel;
 
-    /** Text field for entering the meal date. */
+    /** Input field for entering the meal date. */
     private JTextField dateField;
 
-    /** Dropdown menu for selecting the meal type. */
+    /** Dropdown for selecting meal type. */
     private JComboBox<String> mealTypeBox;
 
-    /** Dropdowns and fields for goal 1: nutrient type, precise amount, and intensity. */
+    /** First nutrient goal: nutrient type, intensity, and precise amount. */
     private JComboBox<String> nutrient1Box, intensity1Box;
     private JTextField preciseAmount1Field;
 
-    /** Dropdowns and fields for goal 2: nutrient type, precise amount, and intensity. */
+    /** Second nutrient goal: nutrient type, intensity, and precise amount. */
     private JComboBox<String> nutrient2Box, intensity2Box;
     private JTextField preciseAmount2Field;
 
-    /** Button for submitting the swap goals. */
+    /** Button to submit goal settings. */
     private JButton submitButton;
 
-    /** Label for displaying feedback messages. */
+    /** Message label for feedback and validation messages. */
     private JLabel messageLabel;
 
     /**
-     * Constructs the MealSwapUI and initializes the layout and components.
+     * Constructs a new {@code MealSwapUI} and initializes the interface.
      */
     public MealSwapUI() {
         initialize();
     }
 
     /**
-     * Initializes the panel layout, adds input sections and binds the submit button.
+     * Initializes the UI layout and its sections.
      */
     private void initialize() {
         panel = new JPanel(new GridBagLayout());
@@ -64,9 +64,9 @@ public class MealSwapUI {
     }
 
     /**
-     * Returns a standard {@link GridBagConstraints} configuration for consistent layout spacing.
+     * Returns a configured {@link GridBagConstraints} for uniform layout.
      *
-     * @return a configured {@link GridBagConstraints} object.
+     * @return the default layout constraints.
      */
     private GridBagConstraints defaultConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -76,9 +76,9 @@ public class MealSwapUI {
     }
 
     /**
-     * Adds date and meal type selection inputs to the UI.
+     * Adds UI components for date input and meal type selection.
      *
-     * @param gbc layout constraints to position components.
+     * @param gbc layout constraints.
      */
     private void addDateAndMealSection(GridBagConstraints gbc) {
         gbc.gridx = 0;
@@ -99,10 +99,10 @@ public class MealSwapUI {
     }
 
     /**
-     * Adds a horizontal separator to visually separate form sections.
+     * Adds a horizontal separator line.
      *
-     * @param gbc layout constraints.
-     * @param row the grid row to place the separator on.
+     * @param gbc  layout constraints.
+     * @param row  the row position of the separator.
      */
     private void addSeparator(GridBagConstraints gbc, int row) {
         gbc.gridx = 0;
@@ -113,12 +113,12 @@ public class MealSwapUI {
     }
 
     /**
-     * Adds one goal section (nutrient, precise amount, and intensity) to the panel.
+     * Adds input fields for nutrient goal definition.
      *
      * @param gbc layout constraints.
-     * @param label the label prefix (e.g., "Goal 1:").
-     * @param startRow the starting grid row for the section.
-     * @param isFirstGoal whether this is the first goal (affects field assignments).
+     * @param label label prefix (e.g., "Goal 1").
+     * @param startRow starting row index.
+     * @param isFirstGoal flag to bind to first or second goal.
      */
     private void addGoalSection(GridBagConstraints gbc, String label, int startRow, boolean isFirstGoal) {
         String[] nutrients = {"Calories", "Protein", "Carbs", "Fat", "Fiber"};
@@ -160,10 +160,10 @@ public class MealSwapUI {
     }
 
     /**
-     * Adds the submit button and message label to the layout and sets up its event handler.
+     * Adds a submit button and message label to the UI.
      *
      * @param gbc layout constraints.
-     * @param startRow the grid row to start the section on.
+     * @param startRow row to begin component placement.
      */
     private void addSubmitAndMessage(GridBagConstraints gbc, int startRow) {
         gbc.gridx = 0;
@@ -192,11 +192,10 @@ public class MealSwapUI {
     }
 
     /**
-     * Opens a popup frame displaying a side-by-side nutrient comparison of the original
-     * and swapped meals, with color-coded cell differences and tooltips.
+     * Opens a comparison frame showing nutritional tables and visual tools.
      *
-     * @param beforeData 2D array of data before swap.
-     * @param afterData 2D array of data after swap.
+     * @param beforeData 2D array of pre-swap meal data.
+     * @param afterData  2D array of post-swap meal data.
      */
     private void updateComparisonTable(Object[][] beforeData, Object[][] afterData) {
         String[] columnNames = {"Item", "Quantity", "Calories", "Protein", "Carbs", "Fiber"};
@@ -211,7 +210,6 @@ public class MealSwapUI {
 
         JTable beforeTable = new JTable(new DefaultTableModel(beforeData, columnNames));
         JTable afterTable = new JTable(new DefaultTableModel(afterData, columnNames));
-
         beforeTable.setEnabled(false);
         afterTable.setEnabled(false);
 
@@ -219,7 +217,6 @@ public class MealSwapUI {
 
         JScrollPane beforeScroll = new JScrollPane(beforeTable);
         JScrollPane afterScroll = new JScrollPane(afterTable);
-
         beforeScroll.setBorder(BorderFactory.createTitledBorder("Before Swap"));
         afterScroll.setBorder(BorderFactory.createTitledBorder("After Swap"));
 
@@ -227,13 +224,18 @@ public class MealSwapUI {
         tablesPanel.add(afterScroll);
         compareFrame.add(tablesPanel, BorderLayout.CENTER);
 
+        JPanel bottomPanel = new JPanel();
+
         JButton applyButton = new JButton("Apply Swap to Previous Meals");
         applyButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(compareFrame, "Swap applied to previous meals successfully!");
             compareFrame.dispose();
         });
 
-        JPanel bottomPanel = new JPanel();
+        JButton visualizeButton = new JButton("Visualize Swap");
+        visualizeButton.addActionListener(e -> showLineBarChart(beforeData, afterData));
+
+        bottomPanel.add(visualizeButton);
         bottomPanel.add(applyButton);
         compareFrame.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -241,11 +243,88 @@ public class MealSwapUI {
     }
 
     /**
-     * Applies tooltip annotations and background color highlighting to the "After" table
-     * based on numeric differences compared to the "Before" table.
+     * Opens a chart frame to visualize nutrient totals before and after the swap.
+     * Allows toggling between line and bar chart formats.
      *
-     * @param beforeTable the original meal nutrient table.
-     * @param afterTable  the proposed swapped meal nutrient table.
+     * @param beforeData 2D array of pre-swap meal data.
+     * @param afterData  2D array of post-swap meal data.
+     */
+    private void showLineBarChart(Object[][] beforeData, Object[][] afterData) {
+        String[] nutrients = {"Calories", "Protein", "Carbs", "Fiber"};
+        double[] totalBefore = new double[nutrients.length];
+        double[] totalAfter = new double[nutrients.length];
+
+        for (Object[] row : beforeData) {
+            for (int i = 0; i < nutrients.length; i++) {
+                try {
+                    totalBefore[i] += Double.parseDouble(row[i + 2].toString());
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+
+        for (Object[] row : afterData) {
+            for (int i = 0; i < nutrients.length; i++) {
+                try {
+                    totalAfter[i] += Double.parseDouble(row[i + 2].toString());
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (int i = 0; i < nutrients.length; i++) {
+            dataset.addValue(totalBefore[i], "Before", nutrients[i]);
+            dataset.addValue(totalAfter[i], "After", nutrients[i]);
+        }
+
+        JPanel chartPanelContainer = new JPanel(new BorderLayout());
+        JFrame chartFrame = new JFrame("Nutrient Comparison Chart");
+        chartFrame.setSize(800, 500);
+        chartFrame.setLocationRelativeTo(null);
+        chartFrame.setLayout(new BorderLayout());
+
+        JFreeChart chart = ChartFactory.createLineChart(
+            "Total Nutrient Changes Before vs After Swap",
+            "Nutrient", "Amount", dataset);
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanelContainer.add(chartPanel, BorderLayout.CENTER);
+
+        JButton toggleButton = new JButton("Switch to Bar Chart");
+        toggleButton.addActionListener(e -> {
+            chartPanelContainer.removeAll();
+            JFreeChart newChart;
+
+            if (toggleButton.getText().contains("Bar")) {
+                newChart = ChartFactory.createBarChart(
+                    "Total Nutrient Changes Before vs After Swap",
+                    "Nutrient", "Amount", dataset);
+                toggleButton.setText("Switch to Line Chart");
+            } else {
+                newChart = ChartFactory.createLineChart(
+                    "Total Nutrient Changes Before vs After Swap",
+                    "Nutrient", "Amount", dataset);
+                toggleButton.setText("Switch to Bar Chart");
+            }
+
+            ChartPanel newPanel = new ChartPanel(newChart);
+            chartPanelContainer.add(newPanel, BorderLayout.CENTER);
+            chartPanelContainer.revalidate();
+            chartPanelContainer.repaint();
+        });
+
+        JPanel togglePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        togglePanel.add(toggleButton);
+
+        chartFrame.add(chartPanelContainer, BorderLayout.CENTER);
+        chartFrame.add(togglePanel, BorderLayout.SOUTH);
+        chartFrame.setVisible(true);
+    }
+
+    /**
+     * Applies tooltip text and background color highlighting to indicate
+     * nutrient increases or decreases in the "After" table.
+     *
+     * @param beforeTable JTable showing original meal values.
+     * @param afterTable  JTable showing swapped meal values.
      */
     private void applyTooltipAndColoring(JTable beforeTable, JTable afterTable) {
         DefaultTableModel beforeModel = (DefaultTableModel) beforeTable.getModel();
@@ -278,9 +357,9 @@ public class MealSwapUI {
     }
 
     /**
-     * Returns the main panel component for integration into a container (e.g., dashboard).
+     * Returns the main panel for integration into a larger container.
      *
-     * @return the {@link JPanel} containing the MealSwapUI.
+     * @return the root {@link JPanel}.
      */
     public JPanel getPanel() {
         return panel;
