@@ -1,24 +1,55 @@
-package loginprofile.test;
+package com.nutrisci.ui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class GoalSettingUI {
+/**
+ * The {@code MealSwapUI} class provides a user interface for setting nutritional swap goals
+ * and visualizing food substitutions before and after the swap.
+ *
+ * <p>This panel allows users to input a date, select a meal type, and define two nutrient-based goals
+ * (e.g., increase fiber, reduce calories). Upon submission, a popup displays a side-by-side comparison
+ * of the original and swapped meals with visual cues and tooltips highlighting nutritional changes.</p>
+ *
+ * <p>Tooltips and color-coded cells in the comparison table enhance user feedback and clarity.</p>
+ */
+public class MealSwapUI {
 
+    /** The main panel for this UI component. */
     private JPanel panel;
+
+    /** Text field for entering the meal date. */
     private JTextField dateField;
+
+    /** Dropdown menu for selecting the meal type. */
     private JComboBox<String> mealTypeBox;
-    private JComboBox<String> nutrient1Box, intensity1Box, nutrient2Box, intensity2Box;
-    private JTextField preciseAmount1Field, preciseAmount2Field;
+
+    /** Dropdowns and fields for goal 1: nutrient type, precise amount, and intensity. */
+    private JComboBox<String> nutrient1Box, intensity1Box;
+    private JTextField preciseAmount1Field;
+
+    /** Dropdowns and fields for goal 2: nutrient type, precise amount, and intensity. */
+    private JComboBox<String> nutrient2Box, intensity2Box;
+    private JTextField preciseAmount2Field;
+
+    /** Button for submitting the swap goals. */
     private JButton submitButton;
+
+    /** Label for displaying feedback messages. */
     private JLabel messageLabel;
 
-    public GoalSettingUI() {
+    /**
+     * Constructs the MealSwapUI and initializes the layout and components.
+     */
+    public MealSwapUI() {
         initialize();
     }
 
+    /**
+     * Initializes the panel layout, adds input sections and binds the submit button.
+     */
     private void initialize() {
         panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -32,6 +63,11 @@ public class GoalSettingUI {
         addSubmitAndMessage(gbc, 10);
     }
 
+    /**
+     * Returns a standard {@link GridBagConstraints} configuration for consistent layout spacing.
+     *
+     * @return a configured {@link GridBagConstraints} object.
+     */
     private GridBagConstraints defaultConstraints() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 5, 10);
@@ -39,6 +75,11 @@ public class GoalSettingUI {
         return gbc;
     }
 
+    /**
+     * Adds date and meal type selection inputs to the UI.
+     *
+     * @param gbc layout constraints to position components.
+     */
     private void addDateAndMealSection(GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -57,6 +98,12 @@ public class GoalSettingUI {
         panel.add(mealTypeBox, gbc);
     }
 
+    /**
+     * Adds a horizontal separator to visually separate form sections.
+     *
+     * @param gbc layout constraints.
+     * @param row the grid row to place the separator on.
+     */
     private void addSeparator(GridBagConstraints gbc, int row) {
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -65,6 +112,14 @@ public class GoalSettingUI {
         gbc.gridwidth = 1;
     }
 
+    /**
+     * Adds one goal section (nutrient, precise amount, and intensity) to the panel.
+     *
+     * @param gbc layout constraints.
+     * @param label the label prefix (e.g., "Goal 1:").
+     * @param startRow the starting grid row for the section.
+     * @param isFirstGoal whether this is the first goal (affects field assignments).
+     */
     private void addGoalSection(GridBagConstraints gbc, String label, int startRow, boolean isFirstGoal) {
         String[] nutrients = {"Calories", "Protein", "Carbs", "Fat", "Fiber"};
         String[] intensityOptions = {"Slightly", "Moderately", "Significantly"};
@@ -104,6 +159,12 @@ public class GoalSettingUI {
         }
     }
 
+    /**
+     * Adds the submit button and message label to the layout and sets up its event handler.
+     *
+     * @param gbc layout constraints.
+     * @param startRow the grid row to start the section on.
+     */
     private void addSubmitAndMessage(GridBagConstraints gbc, int startRow) {
         gbc.gridx = 0;
         gbc.gridy = startRow;
@@ -130,6 +191,13 @@ public class GoalSettingUI {
         });
     }
 
+    /**
+     * Opens a popup frame displaying a side-by-side nutrient comparison of the original
+     * and swapped meals, with color-coded cell differences and tooltips.
+     *
+     * @param beforeData 2D array of data before swap.
+     * @param afterData 2D array of data after swap.
+     */
     private void updateComparisonTable(Object[][] beforeData, Object[][] afterData) {
         String[] columnNames = {"Item", "Quantity", "Calories", "Protein", "Carbs", "Fiber"};
 
@@ -159,11 +227,10 @@ public class GoalSettingUI {
         tablesPanel.add(afterScroll);
         compareFrame.add(tablesPanel, BorderLayout.CENTER);
 
-        // New button for applying swap
         JButton applyButton = new JButton("Apply Swap to Previous Meals");
         applyButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(compareFrame, "Swap applied to previous meals successfully!");
-            compareFrame.dispose(); // closes the popup
+            compareFrame.dispose();
         });
 
         JPanel bottomPanel = new JPanel();
@@ -173,7 +240,13 @@ public class GoalSettingUI {
         compareFrame.setVisible(true);
     }
 
-
+    /**
+     * Applies tooltip annotations and background color highlighting to the "After" table
+     * based on numeric differences compared to the "Before" table.
+     *
+     * @param beforeTable the original meal nutrient table.
+     * @param afterTable  the proposed swapped meal nutrient table.
+     */
     private void applyTooltipAndColoring(JTable beforeTable, JTable afterTable) {
         DefaultTableModel beforeModel = (DefaultTableModel) beforeTable.getModel();
         DefaultTableModel afterModel = (DefaultTableModel) afterTable.getModel();
@@ -204,6 +277,11 @@ public class GoalSettingUI {
         }
     }
 
+    /**
+     * Returns the main panel component for integration into a container (e.g., dashboard).
+     *
+     * @return the {@link JPanel} containing the MealSwapUI.
+     */
     public JPanel getPanel() {
         return panel;
     }

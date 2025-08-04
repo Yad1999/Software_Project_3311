@@ -1,45 +1,77 @@
-package loginprofile.test;
+package com.nutrisci.ui;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.util.HashMap;
+import java.awt.*;
 import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * The {@code MealLogUI} class provides a graphical user interface for logging meals
+ * in the NutriSci application.
+ * 
+ * <p>Users can input the date, select a meal type (e.g., breakfast, lunch),
+ * add ingredients with quantities, and submit the meal. Upon submission,
+ * total nutrient information (calories, protein, carbs, and fat) is calculated
+ * based on a mock nutrition database.</p>
+ * 
+ * <p>This panel is typically embedded in the {@code MainDashboardUI} using a {@code CardLayout}.</p>
+ */
 public class MealLogUI {
 
+    /** The main panel for the meal logging UI. */
     private JPanel mealLogPanel;
+
+    /** Panel containing date and meal type fields. */
     private JPanel topPanel;
+
+    /** Panel containing table and control buttons. */
     private JPanel bottomPanel;
+
+    /** Sub-panel that holds add/delete/submit buttons. */
     private JPanel buttonPanel;
+
+    /** Text field for entering the date of the meal. */
     private JTextField dateField;
+
+    /** Combo box for selecting meal type. */
     private JComboBox<String> mealTypeComboBox;
+
+    /** Table for listing ingredients and their quantities. */
     private JTable ingredientsTable;
+
+    /** Model managing table data for ingredients. */
     private DefaultTableModel tableModel;
+
+    /** Button to add a new row to the ingredient table. */
     private JButton addRowButton;
+
+    /** Button to submit the meal and calculate nutrient totals. */
     private JButton submitButton;
+
+    /** Button to delete a selected ingredient row. */
     private JButton deleteButton;
+
+    /** Label to display success or error messages. */
     private JLabel statusLabel;
 
+    /** Mock database used to retrieve nutritional values. */
     private MockNutritionDB nutritionDB = new MockNutritionDB();
 
+    /**
+     * Constructs the Meal Logging UI and initializes all components.
+     */
     public MealLogUI() {
         initialize();
     }
 
+    /**
+     * Initializes the UI layout and components for date input, meal type,
+     * ingredient entry, and submission functionality.
+     */
     private void initialize() {
         mealLogPanel = new JPanel(new BorderLayout());
 
-        // Top panel: date + meal type
+        // --- Top Panel: Date and Meal Type ---
         topPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 
@@ -54,7 +86,7 @@ public class MealLogUI {
 
         mealLogPanel.add(topPanel, BorderLayout.NORTH);
 
-        // Center Panel: ingredients table
+        // --- Center Panel: Ingredients Table ---
         String[] columnNames = {"Ingredient", "Quantity (e.g., 100g)"};
         tableModel = new DefaultTableModel(columnNames, 0);
         ingredientsTable = new JTable(tableModel);
@@ -62,16 +94,17 @@ public class MealLogUI {
         JScrollPane scrollPane = new JScrollPane(ingredientsTable);
         mealLogPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom Panel: add row, submit, and status
+        // --- Bottom Panel: Buttons and Status ---
         bottomPanel = new JPanel(new BorderLayout());
 
         buttonPanel = new JPanel();
+
         addRowButton = new JButton("Add Ingredient");
         addRowButton.addActionListener(e -> tableModel.addRow(new Object[] {"", ""}));
-        
+
         deleteButton = new JButton("Delete Ingredient");
         deleteButton.addActionListener(e -> {
-        	int selectedRow = ingredientsTable.getSelectedRow();
+            int selectedRow = ingredientsTable.getSelectedRow();
             if (selectedRow != -1) {
                 tableModel.removeRow(selectedRow);
             } else {
@@ -95,6 +128,14 @@ public class MealLogUI {
         mealLogPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Processes the submitted meal entry by calculating total nutrient values based
+     * on the entered ingredients and their quantities.
+     * 
+     * <p>If the date or ingredient list is empty, an error is displayed.
+     * Otherwise, totals for calories, protein, carbs, and fat are computed
+     * and printed to console, and the calorie total is displayed on screen.</p>
+     */
     private void handleSubmitMeal() {
         String date = dateField.getText().trim();
         String mealType = (String) mealTypeComboBox.getSelectedItem();
@@ -124,7 +165,7 @@ public class MealLogUI {
                     totalFat += info.getFat() * (quantity / 100);
                 }
             } catch (NumberFormatException ex) {
-                // Skip invalid entries
+                // Skip invalid entries silently
             }
         }
 
@@ -135,6 +176,11 @@ public class MealLogUI {
         statusLabel.setText(String.format("\u2705 Calories: %.2f kcal", totalCalories));
     }
 
+    /**
+     * Returns the main panel of the meal logging interface.
+     *
+     * @return the {@code JPanel} containing the entire meal logging UI.
+     */
     public JPanel getPanel() {
         return mealLogPanel;
     }
