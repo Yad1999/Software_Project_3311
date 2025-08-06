@@ -20,39 +20,23 @@ public class MealEntry {
     /** A list of ingredient entries associated with the meal. */
     private List<IngredientEntry> ingredients;
 
-    /** Total calories consumed in the meal. */
-    private double totalCalories;
-
-    /** Total protein (in grams) consumed in the meal. */
-    private double totalProtein;
-
-    /** Total carbohydrates (in grams) consumed in the meal. */
-    private double totalCarbs;
-
-    /** Total fat (in grams) consumed in the meal. */
-    private double totalFat;
+    /** The nutritional profile of the meal. */
+    private NutrientProfile nutrientProfile;
 
     /**
      * Constructs a {@code MealEntry} with the specified date, meal type,
-     * ingredient list, and nutritional totals.
+     * ingredient list, and nutrient profile.
      *
      * @param date the date of the meal (YYYY-MM-DD)
      * @param mealType the type of the meal (e.g., "Lunch")
      * @param ingredients list of {@link IngredientEntry} instances in the meal
-     * @param totalCalories total calories in the meal
-     * @param totalProtein total protein in grams
-     * @param totalCarbs total carbohydrates in grams
-     * @param totalFat total fat in grams
+     * @param nutrientProfile the {@link NutrientProfile} containing nutrient totals
      */
-    public MealEntry(String date, String mealType, List<IngredientEntry> ingredients,
-                     double totalCalories, double totalProtein, double totalCarbs, double totalFat) {
+    public MealEntry(String date, String mealType, List<IngredientEntry> ingredients, NutrientProfile nutrientProfile) {
         this.date = date;
         this.mealType = mealType;
         this.ingredients = ingredients;
-        this.totalCalories = totalCalories;
-        this.totalProtein = totalProtein;
-        this.totalCarbs = totalCarbs;
-        this.totalFat = totalFat;
+        this.nutrientProfile = nutrientProfile;
     }
 
     /**
@@ -83,12 +67,21 @@ public class MealEntry {
     }
 
     /**
+     * Returns the nutrient profile for the meal.
+     *
+     * @return {@link NutrientProfile} object
+     */
+    public NutrientProfile getNutrientProfile() {
+        return nutrientProfile;
+    }
+
+    /**
      * Returns the total calories for the meal.
      *
      * @return total calories
      */
     public double getTotalCalories() {
-        return totalCalories;
+        return nutrientProfile.getCalories();
     }
 
     /**
@@ -97,7 +90,7 @@ public class MealEntry {
      * @return total protein in grams
      */
     public double getTotalProtein() {
-        return totalProtein;
+        return nutrientProfile.getProtein();
     }
 
     /**
@@ -106,7 +99,7 @@ public class MealEntry {
      * @return total carbs in grams
      */
     public double getTotalCarbs() {
-        return totalCarbs;
+        return nutrientProfile.getCarbs();
     }
 
     /**
@@ -115,7 +108,7 @@ public class MealEntry {
      * @return total fat in grams
      */
     public double getTotalFat() {
-        return totalFat;
+        return nutrientProfile.getFat();
     }
 
     /**
@@ -126,6 +119,6 @@ public class MealEntry {
      */
     @Override
     public String toString() {
-        return String.format("%s - %s: %.2f kcal", date, mealType, totalCalories);
+        return String.format("%s - %s: %.2f kcal", date, mealType, getTotalCalories());
     }
 }

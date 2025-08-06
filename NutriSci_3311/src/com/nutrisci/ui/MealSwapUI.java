@@ -332,29 +332,62 @@ public class MealSwapUI {
 
         for (int col = 2; col < afterModel.getColumnCount(); col++) {
             final int fCol = col;
-            afterTable.getColumnModel().getColumn(col).setCellRenderer((table, value, isSelected, hasFocus, row, column) -> {
-                Object beforeVal = beforeModel.getValueAt(row, fCol);
-                Object afterVal = afterModel.getValueAt(row, fCol);
-                JLabel cell = new JLabel(afterVal != null ? afterVal.toString() : "");
-                cell.setOpaque(true);
-
-                if (beforeVal != null && afterVal != null) {
-                    try {
-                        double beforeNum = Double.parseDouble(beforeVal.toString());
-                        double afterNum = Double.parseDouble(afterVal.toString());
-
-                        if (afterNum > beforeNum) {
-                            cell.setBackground(Color.GREEN.brighter());
-                        } else if (afterNum < beforeNum) {
-                            cell.setBackground(Color.PINK);
-                        }
-                        cell.setToolTipText(String.format("Was %.2f, now %.2f", beforeNum, afterNum));
-                    } catch (NumberFormatException ignored) {}
-                }
-                return cell;
-            });
+            afterTable.getColumnModel().getColumn(col).setCellRenderer((table, value, isSelected, hasFocus, row, column) ->
+                    createStyledCell(beforeModel, afterModel, row, fCol)
+            );
         }
     }
+
+    /**
+     * Creates a styled table cell with background color and tooltip
+     * based on before and after nutrient values.
+     *
+     * @param beforeModel the table model with original values
+     * @param afterModel  the table model with swapped values
+     * @param row         the row index
+     * @param col         the column index
+     * @return a styled JLabel for the table cell
+     */
+    private JLabel createStyledCell(DefaultTableModel beforeModel, DefaultTableModel afterModel, int row, int col) {
+        Object beforeVal = beforeModel.getValueAt(row, col);
+        Object afterVal = afterModel.getValueAt(row, col);
+
+        JLabel cell = new JLabel(afterVal != null ? afterVal.toString() : "");
+        cell.setOpaque(true);
+
+        if (beforeVal == null || afterVal == null) {
+            return cell;
+        }
+
+        try {
+            double beforeNum = Double.parseDouble(beforeVal.toString());
+            double afterNum = Double.parseDouble(afterVal.toString());
+            applyColorAndTooltip(cell, beforeNum, afterNum);
+        } catch (NumberFormatException ignored) {
+            // Invalid numeric value, skip styling
+        }
+
+        return cell;
+    }
+
+    /**
+     * Applies background color and tooltip based on the comparison
+     * between before and after values.
+     *
+     * @param cell       the label representing the cell
+     * @param beforeNum  the original nutrient value
+     * @param afterNum   the swapped nutrient value
+     */
+    private void applyColorAndTooltip(JLabel cell, double beforeNum, double afterNum) {
+        if (afterNum > beforeNum) {
+            cell.setBackground(Color.GREEN.brighter());
+        } else if (afterNum < beforeNum) {
+            cell.setBackground(Color.PINK);
+        }
+
+        cell.setToolTipText(String.format("Was %.2f, now %.2f", beforeNum, afterNum));
+    }
+
 
     /**
      * Returns the main panel for integration into a larger container.
