@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 /**
  * Data Transfer Object representing a user in the NutriSci application.
+ * Uses Builder pattern to handle complex object construction with many parameters.
  * Contains all user profile information including updated fields for sex, dob, height, weight, and unit preference.
  */
 public class User {
@@ -20,36 +21,240 @@ public class User {
     private String unitPreference; // 'metric' or 'imperial'
     private LocalDateTime createdAt;
     
-    // Default constructor
-    public User() {}
-    
-    // Constructor for creating new user (without userId and createdAt)
-    public User(String username, String email, String passwordHash, char sex, 
-                LocalDate dateOfBirth, int heightCm, double weightKg, String unitPreference) {
-        this.username = username;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.sex = sex;
-        this.dateOfBirth = dateOfBirth;
-        this.heightCm = heightCm;
-        this.weightKg = weightKg;
-        this.unitPreference = unitPreference;
+    // Private constructor for Builder pattern
+    private User(Builder builder) {
+        this.userId = builder.userId;
+        this.username = builder.username;
+        this.email = builder.email;
+        this.passwordHash = builder.passwordHash;
+        this.sex = builder.sex;
+        this.dateOfBirth = builder.dateOfBirth;
+        this.heightCm = builder.heightCm;
+        this.weightKg = builder.weightKg;
+        this.unitPreference = builder.unitPreference;
+        this.createdAt = builder.createdAt;
     }
     
-    // Full constructor
-    public User(int userId, String username, String email, String passwordHash, char sex,
-                LocalDate dateOfBirth, int heightCm, double weightKg, String unitPreference, 
-                LocalDateTime createdAt) {
-        this.userId = userId;
-        this.username = username;
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.sex = sex;
-        this.dateOfBirth = dateOfBirth;
-        this.heightCm = heightCm;
-        this.weightKg = weightKg;
-        this.unitPreference = unitPreference;
-        this.createdAt = createdAt;
+    // Default constructor for frameworks/serialization
+    public User() {}
+    
+
+    
+    /**
+     * Creates a new Builder instance for constructing User objects.
+     * 
+     * @return new Builder instance
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+    
+    /**
+     * Builder class for constructing User objects with fluent interface.
+     * Follows the Builder pattern to handle complex object construction.
+     */
+    public static class Builder {
+        private int userId;
+        private String username;
+        private String email;
+        private String passwordHash;
+        private char sex;
+        private LocalDate dateOfBirth;
+        private int heightCm;
+        private double weightKg;
+        private String unitPreference = "metric"; // Default value
+        private LocalDateTime createdAt;
+        
+        private Builder() {}
+        
+        /**
+         * Sets the user ID (typically for existing users from database).
+         * 
+         * @param userId the user ID
+         * @return this builder for method chaining
+         */
+        public Builder userId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+        
+        /**
+         * Sets the username (required field).
+         * 
+         * @param username the unique username
+         * @return this builder for method chaining
+         */
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+        
+        /**
+         * Sets the email address (required field).
+         * 
+         * @param email the user's email address
+         * @return this builder for method chaining
+         */
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+        
+        /**
+         * Sets the password hash (required field).
+         * 
+         * @param passwordHash the hashed password
+         * @return this builder for method chaining
+         */
+        public Builder passwordHash(String passwordHash) {
+            this.passwordHash = passwordHash;
+            return this;
+        }
+        
+        /**
+         * Sets the user's sex (required field).
+         * 
+         * @param sex the user's sex ('M', 'F', or 'O')
+         * @return this builder for method chaining
+         */
+        public Builder sex(char sex) {
+            this.sex = sex;
+            return this;
+        }
+        
+        /**
+         * Sets the date of birth (required field).
+         * 
+         * @param dateOfBirth the user's date of birth
+         * @return this builder for method chaining
+         */
+        public Builder dateOfBirth(LocalDate dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
+            return this;
+        }
+        
+        /**
+         * Sets the height in centimeters (required field).
+         * 
+         * @param heightCm the user's height in centimeters
+         * @return this builder for method chaining
+         */
+        public Builder heightCm(int heightCm) {
+            this.heightCm = heightCm;
+            return this;
+        }
+        
+        /**
+         * Sets the weight in kilograms (required field).
+         * 
+         * @param weightKg the user's weight in kilograms
+         * @return this builder for method chaining
+         */
+        public Builder weightKg(double weightKg) {
+            this.weightKg = weightKg;
+            return this;
+        }
+        
+        /**
+         * Sets the unit preference (defaults to "metric").
+         * 
+         * @param unitPreference the preferred unit system ("metric" or "imperial")
+         * @return this builder for method chaining
+         */
+        public Builder unitPreference(String unitPreference) {
+            this.unitPreference = unitPreference;
+            return this;
+        }
+        
+        /**
+         * Sets the account creation timestamp (typically set by database).
+         * 
+         * @param createdAt when the user account was created
+         * @return this builder for method chaining
+         */
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+        
+        /**
+         * Builds and validates the User object.
+         * 
+         * @return new User instance
+         * @throws IllegalStateException if required fields are missing
+         */
+        public User build() {
+            validateRequiredFields();
+            return new User(this);
+        }
+        
+        /**
+         * Validates that all required fields are set.
+         * 
+         * @throws IllegalStateException if validation fails
+         */
+        private void validateRequiredFields() {
+            validateStringFields();
+            validateSexField();
+            validateDateOfBirth();
+            validatePhysicalMeasurements();
+        }
+        
+        /**
+         * Validates required string fields (username, email, passwordHash, unitPreference).
+         * 
+         * @throws IllegalStateException if any string field validation fails
+         */
+        private void validateStringFields() {
+            if (username == null || username.trim().isEmpty()) {
+                throw new IllegalStateException("Username is required");
+            }
+            if (email == null || email.trim().isEmpty()) {
+                throw new IllegalStateException("Email is required");
+            }
+            if (passwordHash == null || passwordHash.trim().isEmpty()) {
+                throw new IllegalStateException("Password hash is required");
+            }
+            if (unitPreference == null || unitPreference.trim().isEmpty()) {
+                throw new IllegalStateException("Unit preference is required");
+            }
+        }
+        
+        /**
+         * Validates the sex field.
+         * 
+         * @throws IllegalStateException if sex field validation fails
+         */
+        private void validateSexField() {
+            if (sex != 'M' && sex != 'F' && sex != 'O') {
+                throw new IllegalStateException("Valid sex (M, F, or O) is required");
+            }
+        }
+        
+        /**
+         * Validates the date of birth field.
+         * 
+         * @throws IllegalStateException if date of birth validation fails
+         */
+        private void validateDateOfBirth() {
+            if (dateOfBirth == null) {
+                throw new IllegalStateException("Date of birth is required");
+            }
+        }
+        
+        /**
+         * Validates physical measurement fields (height and weight).
+         * 
+         * @throws IllegalStateException if physical measurement validation fails
+         */
+        private void validatePhysicalMeasurements() {
+            if (heightCm <= 0) {
+                throw new IllegalStateException("Valid height (greater than 0) is required");
+            }
+            if (weightKg <= 0) {
+                throw new IllegalStateException("Valid weight (greater than 0) is required");
+            }
+        }
     }
     
     // Getters and Setters

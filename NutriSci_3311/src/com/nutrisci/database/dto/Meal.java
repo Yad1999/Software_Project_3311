@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Data Transfer Object representing a logged meal with its associated meal items.
+ * Uses Builder pattern to handle complex object construction with many parameters.
  */
 public class Meal {
     
@@ -17,28 +18,153 @@ public class Meal {
     private LocalDateTime loggedAt;
     private List<MealItem> mealItems;
     
-    // Default constructor
+    // Private constructor for Builder pattern
+    private Meal(Builder builder) {
+        this.mealId = builder.mealId;
+        this.mealType = builder.mealType;
+        this.mealDate = builder.mealDate;
+        this.userId = builder.userId;
+        this.loggedAt = builder.loggedAt;
+        this.mealItems = builder.mealItems != null ? builder.mealItems : new ArrayList<>();
+    }
+    
+    // Default constructor for frameworks/serialization
     public Meal() {
         this.mealItems = new ArrayList<>();
     }
     
-    // Constructor for creating new meal (without mealId and loggedAt)
-    public Meal(MealType mealType, LocalDate mealDate, int userId) {
-        this.mealType = mealType;
-        this.mealDate = mealDate;
-        this.userId = userId;
-        this.mealItems = new ArrayList<>();
+    /**
+     * Creates a new Builder instance for constructing Meal objects.
+     * 
+     * @return new Builder instance
+     */
+    public static Builder builder() {
+        return new Builder();
     }
     
-    // Full constructor
-    public Meal(int mealId, MealType mealType, LocalDate mealDate, int userId, 
-                LocalDateTime loggedAt, List<MealItem> mealItems) {
-        this.mealId = mealId;
-        this.mealType = mealType;
-        this.mealDate = mealDate;
-        this.userId = userId;
-        this.loggedAt = loggedAt;
-        this.mealItems = mealItems != null ? mealItems : new ArrayList<>();
+    /**
+     * Builder class for constructing Meal objects with fluent interface.
+     * Follows the Builder pattern to handle complex object construction.
+     */
+    public static class Builder {
+        private int mealId;
+        private MealType mealType;
+        private LocalDate mealDate;
+        private int userId;
+        private LocalDateTime loggedAt;
+        private List<MealItem> mealItems;
+        
+        private Builder() {
+            this.mealItems = new ArrayList<>();
+        }
+        
+        /**
+         * Sets the meal ID (typically for existing meals from database).
+         * 
+         * @param mealId the meal ID
+         * @return this builder for method chaining
+         */
+        public Builder mealId(int mealId) {
+            this.mealId = mealId;
+            return this;
+        }
+        
+        /**
+         * Sets the meal type (required field).
+         * 
+         * @param mealType the type of meal (breakfast, lunch, dinner, snack)
+         * @return this builder for method chaining
+         */
+        public Builder mealType(MealType mealType) {
+            this.mealType = mealType;
+            return this;
+        }
+        
+        /**
+         * Sets the meal date (required field).
+         * 
+         * @param mealDate the date when the meal was consumed
+         * @return this builder for method chaining
+         */
+        public Builder mealDate(LocalDate mealDate) {
+            this.mealDate = mealDate;
+            return this;
+        }
+        
+        /**
+         * Sets the user ID (required field).
+         * 
+         * @param userId the ID of the user who logged this meal
+         * @return this builder for method chaining
+         */
+        public Builder userId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+        
+        /**
+         * Sets the logged timestamp (typically set by database).
+         * 
+         * @param loggedAt when the meal was logged in the system
+         * @return this builder for method chaining
+         */
+        public Builder loggedAt(LocalDateTime loggedAt) {
+            this.loggedAt = loggedAt;
+            return this;
+        }
+        
+        /**
+         * Sets the list of meal items.
+         * 
+         * @param mealItems the food items in this meal
+         * @return this builder for method chaining
+         */
+        public Builder mealItems(List<MealItem> mealItems) {
+            this.mealItems = mealItems != null ? new ArrayList<>(mealItems) : new ArrayList<>();
+            return this;
+        }
+        
+        /**
+         * Adds a single meal item to the meal.
+         * 
+         * @param mealItem the meal item to add
+         * @return this builder for method chaining
+         */
+        public Builder addMealItem(MealItem mealItem) {
+            if (this.mealItems == null) {
+                this.mealItems = new ArrayList<>();
+            }
+            this.mealItems.add(mealItem);
+            return this;
+        }
+        
+        /**
+         * Builds and validates the Meal object.
+         * 
+         * @return new Meal instance
+         * @throws IllegalStateException if required fields are missing
+         */
+        public Meal build() {
+            validateRequiredFields();
+            return new Meal(this);
+        }
+        
+        /**
+         * Validates that all required fields are set.
+         * 
+         * @throws IllegalStateException if validation fails
+         */
+        private void validateRequiredFields() {
+            if (mealType == null) {
+                throw new IllegalStateException("Meal type is required");
+            }
+            if (mealDate == null) {
+                throw new IllegalStateException("Meal date is required");
+            }
+            if (userId <= 0) {
+                throw new IllegalStateException("Valid user ID is required");
+            }
+        }
     }
     
     // Getters and Setters

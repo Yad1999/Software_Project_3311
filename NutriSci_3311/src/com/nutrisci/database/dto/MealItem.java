@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 /**
  * Data Transfer Object representing a meal item (food with quantity) within a logged meal.
+ * Uses Builder pattern to handle complex object construction with many parameters.
  */
 public class MealItem {
     
@@ -13,31 +14,133 @@ public class MealItem {
     private BigDecimal quantityGrams;
     private String foodName; // For display purposes when joining with FOOD_NAME table
     
-    // Default constructor
+    // Private constructor for Builder pattern
+    private MealItem(Builder builder) {
+        this.itemId = builder.itemId;
+        this.mealId = builder.mealId;
+        this.foodId = builder.foodId;
+        this.quantityGrams = builder.quantityGrams;
+        this.foodName = builder.foodName;
+    }
+    
+    // Default constructor for frameworks/serialization
     public MealItem() {}
     
-    // Constructor for creating new meal item (without itemId)
-    public MealItem(int mealId, int foodId, BigDecimal quantityGrams) {
-        this.mealId = mealId;
-        this.foodId = foodId;
-        this.quantityGrams = quantityGrams;
+    /**
+     * Creates a new Builder instance for constructing MealItem objects.
+     * 
+     * @return new Builder instance
+     */
+    public static Builder builder() {
+        return new Builder();
     }
     
-    // Constructor with food name for display
-    public MealItem(int mealId, int foodId, BigDecimal quantityGrams, String foodName) {
-        this.mealId = mealId;
-        this.foodId = foodId;
-        this.quantityGrams = quantityGrams;
-        this.foodName = foodName;
-    }
-    
-    // Full constructor
-    public MealItem(int itemId, int mealId, int foodId, BigDecimal quantityGrams, String foodName) {
-        this.itemId = itemId;
-        this.mealId = mealId;
-        this.foodId = foodId;
-        this.quantityGrams = quantityGrams;
-        this.foodName = foodName;
+    /**
+     * Builder class for constructing MealItem objects with fluent interface.
+     * Follows the Builder pattern to handle complex object construction.
+     */
+    public static class Builder {
+        private int itemId;
+        private int mealId;
+        private int foodId;
+        private BigDecimal quantityGrams;
+        private String foodName;
+        
+        private Builder() {}
+        
+        /**
+         * Sets the meal item ID (typically for existing items from database).
+         * 
+         * @param itemId the meal item ID
+         * @return this builder for method chaining
+         */
+        public Builder itemId(int itemId) {
+            this.itemId = itemId;
+            return this;
+        }
+        
+        /**
+         * Sets the meal ID this item belongs to (required field).
+         * 
+         * @param mealId the meal ID
+         * @return this builder for method chaining
+         */
+        public Builder mealId(int mealId) {
+            this.mealId = mealId;
+            return this;
+        }
+        
+        /**
+         * Sets the food ID from the CNF database (required field).
+         * 
+         * @param foodId the food ID
+         * @return this builder for method chaining
+         */
+        public Builder foodId(int foodId) {
+            this.foodId = foodId;
+            return this;
+        }
+        
+        /**
+         * Sets the quantity in grams (required field).
+         * 
+         * @param quantityGrams the quantity in grams
+         * @return this builder for method chaining
+         */
+        public Builder quantityGrams(BigDecimal quantityGrams) {
+            this.quantityGrams = quantityGrams;
+            return this;
+        }
+        
+        /**
+         * Sets the quantity in grams using double value (convenience method).
+         * 
+         * @param quantityGrams the quantity in grams as double
+         * @return this builder for method chaining
+         */
+        public Builder quantityGrams(double quantityGrams) {
+            this.quantityGrams = BigDecimal.valueOf(quantityGrams);
+            return this;
+        }
+        
+        /**
+         * Sets the food name for display purposes.
+         * 
+         * @param foodName the display name of the food
+         * @return this builder for method chaining
+         */
+        public Builder foodName(String foodName) {
+            this.foodName = foodName;
+            return this;
+        }
+        
+        /**
+         * Builds and validates the MealItem object.
+         * 
+         * @return new MealItem instance
+         * @throws IllegalStateException if required fields are missing
+         */
+        public MealItem build() {
+            validateRequiredFields();
+            return new MealItem(this);
+        }
+        
+        /**
+         * Validates that all required fields are set.
+         * 
+         * @throws IllegalStateException if validation fails
+         */
+        private void validateRequiredFields() {
+            if (mealId <= 0) {
+                throw new IllegalStateException("Valid meal ID is required");
+            }
+            if (foodId <= 0) {
+                throw new IllegalStateException("Valid food ID is required");
+            }
+            if (quantityGrams == null || quantityGrams.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalStateException("Valid quantity (greater than 0) is required");
+            }
+        }
     }
     
     // Getters and Setters
